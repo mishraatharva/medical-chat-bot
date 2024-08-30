@@ -1,0 +1,19 @@
+ipykernel
+langchain
+sentence-transformers==2.2.2 # HunggingFaceEmbedding need this to be installed.
+pypdf
+python-dotenv
+langchain-community
+langchain_huggingface
+
+# related to frontend
+flask
+jinja2
+
+# related to pinecone
+langchain-pinecone 
+pinecone-notebooks
+
+# related to chat model
+langchain_groq
+-e .
