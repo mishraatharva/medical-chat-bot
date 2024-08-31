@@ -11,6 +11,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 from pinecone import Pinecone, ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
+# from langchain.vectorstores import Pinecone as PineconeStore
 
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -39,14 +40,15 @@ def download_hugging_face_embedding():
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     return embeddings
 
+def get_chat_model():
+    pass
+
 
 # Authenticate with pinecone
 def setup_pinecone(api_key,index_name,embedding):
     pc = Pinecone(api_key="f5332a0e-31e2-49be-8512-cd45f97e31e0")
     index = pc.Index(index_name)
-    # db=Pinecone.from_existing_index(index_name, embedding)
-
-    db = PineconeVectorStore(index=index, embedding=embedding,index_name=index_name)
+    db = PineconeVectorStore(index=index, embedding=embedding, index_name=index_name)
     return db
 
 
@@ -59,8 +61,14 @@ def get_retriver_chain(model,prompt,db):
 
 # format data as per our reqirement
 def get_structured_data(result):
+    print("get_structured_data")
     answer = result["answer"]
     source1 = result['context'][0].metadata['page']
     source2 = result['context'][1].metadata['page']
 
     return f"answer: {answer}\n\nsource: {source1} and {source2}"
+
+##----------------------------------------------------------------------------
+
+
+
