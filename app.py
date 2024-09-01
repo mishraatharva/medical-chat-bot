@@ -22,13 +22,9 @@ from langchain.chains import create_history_aware_retriever, create_retrieval_ch
 
 
 app = Flask(__name__)
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
-# Session(app)
-
-# if "store" not in Session:
-#     Session['store'] = {}
-
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 
 # SETUP API_KEYS
@@ -56,10 +52,10 @@ history_aware_retriever=create_history_aware_retriever(model,retriver,contextual
 question_answer_chain=create_stuff_documents_chain(model,qa_prompt)
 rag_chain=create_retrieval_chain(history_aware_retriever,question_answer_chain)
 
-def get_session_history(session:str)->BaseChatMessageHistory:
-    if session_id not in store:
-        store[session_id]=ChatMessageHistory()
-    return store[session_id]
+def get_session_history(session_id:str)->BaseChatMessageHistory:
+    if not session.get(session_id):
+        session[session_id]=ChatMessageHistory()
+    return session.get(session_id)
     
 
 conversational_rag_chain=RunnableWithMessageHistory(
